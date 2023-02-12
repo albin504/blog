@@ -138,6 +138,7 @@ const myFirstPromise = new Promise((resolve, reject) => {
 
 # promise 的一种特殊语法async/await 
 > https://zh.javascript.info/async-await
+
 在函数前面的 “async” 这个单词表达了一个简单的事情：即这个函数总是返回一个 promise。其他值将自动被包装在一个 resolved 的 promise 中。
 啥意思呢？
 ```
@@ -146,4 +147,58 @@ async function f() {
 }
 f().then(alert); // 1
 ```
-这段代码，就类似于
+这段代码，就类似于“new了一个Promise对象，并调用了resolve()方法”后的效果，promise会自动进入fulfilled状态，then()方法会被执行。
+
+个人理解：async关键字，从功能上讲：是把同步函数，改为异步函数。看下面的例子：
+
+```
+async function f() {
+	// 用法
+  return 1;
+}
+
+f().then(() => {
+	console.log("then");
+}); // 1
+
+console.log("开始执行");
+```
+函数f() 现在就是异步执行了，先输出“开始执行”，再输出"then“.
+
+
+## await关键字就是等待promise状态变为“fulfilled”,把异步改为同步。
+看例子：
+```
+async function f() {
+
+  let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("done!"), 1000)
+  });
+
+  let result = await promise; // 等待，直到 promise resolve (*)
+	console.log(result);
+  alert(result); // "done!"
+}
+
+f();
+
+console.log("开始执行")
+```
+
+# js fetch api替代jquery
+
+刚工作那会儿写js，发http请求用的都是jquery。
+今天发现了js fetch api，使用起来要更加便捷。
+看一个例子：
+```
+fetch('https://api.github.com/users/ruanyf')
+  .then(response => response.json())
+  .then(json => console.log(json))
+  .catch(err => console.log('Request Failed', err)); 
+```
+
+fetch()返回的的是Promise对象，fetch()接收到的response是一个 Stream 对象，response.json()是一个异步操作，返回的也是Promise对象。
+因此就可以进行链式调用了then().then()
+
+
+
