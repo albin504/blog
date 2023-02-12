@@ -113,6 +113,12 @@ promise.then(whetherResolve).then((data) => {
 
 1. 先有一个异步函数。如setTimeout、ajax，都是异步函数
 2. 通过 **new Promise(asyncFunc)** 的方式，封装异步函数，返回一个“承诺”
-3. 承诺，当异步任务之行完成时，执行特定的回调函数。
+3. 承诺，当异步任务执行完成后，执行特定的回调函数。
+
+Promise 有三种状态：
+- 待定（pending）：初始状态，既没有被兑现，也没有被拒绝。这是调用 fetch() 返回 Promise 时的状态，此时请求还在进行中。
+- 已兑现（fulfilled）：意味着操作成功完成。当 Promise 完成时，它的 then() 处理函数被调用。
+- 已拒绝（rejected）：意味着操作失败。当一个 Promise 失败时，它的 catch() 处理函数被调用。
+
 
 
