@@ -136,3 +136,14 @@ const myFirstPromise = new Promise((resolve, reject) => {
 - 调用reslove()方法，会使得“承诺”的状态变为"fulfilled",然后它的 then() 处理函数被调用
 - 调用reject()方法，会使得“承诺”的状态变为"rejected",然后它的 catch() 处理函数被调用
 
+# promise 的一种特殊语法async/await 
+> https://zh.javascript.info/async-await
+在函数前面的 “async” 这个单词表达了一个简单的事情：即这个函数总是返回一个 promise。其他值将自动被包装在一个 resolved 的 promise 中。
+啥意思呢？
+```
+async function f() {
+  return 1;
+}
+f().then(alert); // 1
+```
+这段代码，就类似于
