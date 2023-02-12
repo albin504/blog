@@ -121,4 +121,18 @@ Promise 有三种状态：
 - 已拒绝（rejected）：意味着操作失败。当一个 Promise 失败时，它的 catch() 处理函数被调用。
 
 
+下面用一个例子，来说明如何构造一个Promise对象，以及Promise对象状态流转过程。
+> https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/Promise
+
+```
+const myFirstPromise = new Promise((resolve, reject) => {
+  //do something asynchronous which eventually calls either:
+     resolve(someValue)        // fulfilled
+  or
+     reject("failure reason")  // rejected
+});
+```
+即在异步函数中：
+- 调用reslove()方法，会使得“承诺”的状态变为"fulfilled",然后它的 then() 处理函数被调用
+- 调用reject()方法，会使得“承诺”的状态变为"rejected",然后它的 catch() 处理函数被调用
 
