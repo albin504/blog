@@ -1,0 +1,113 @@
+假如我们要实现了一个行程规划的功能，分两步：
+1. 获取当地天气
+2. 天气获取成功之后，进行行程规划
+这两步都要调用api，比较慢，因此我们想异步实现“行程规划”的功能。
+
+过去jquery ajax用的比较多，涉及到异步回调的代码，一般是这么写的：
+
+```
+// 获取最新的天气信息
+function refreshWhether(resolve, reject) {
+    $.ajax({
+        "url" : 'https://fiddle.jshell.net',
+        'success' : function (result,status,xhr)	{
+        	resolve("成功");
+        },
+        'error' : function (result,status,xhr)	{
+        	reject("失败");
+          console.log(result);
+        }
+    })
+}
+
+
+function whetherResolve(msg)
+{
+    alert("resolve:" + msg)
+    // 天气刷新成功，执行“行程规划”异步任务.
+    // 在回调中调用另一个回调会出现多层嵌套，这种“回调地狱”使我们的代码难以理解
+    planTrip(msg => {
+    	// 行程规划成功回调
+      alert("行程规划成功")
+    }, msg => {
+    	// 行程规划失败回调
+      alert("行程规划失败")
+    });
+}
+
+function whetherReject(msg)
+{
+    alert("reject:" + msg)
+}
+
+// 根据天气信息，规划出行计划
+function planTrip(resolve, reject) {
+    $.ajax({
+        "url" : 'https://fiddle.jshell.net',
+        'success' : function (result,status,xhr)	{
+        	resolve("成功");
+        },
+        'error' : function (result,status,xhr)	{
+        	reject("失败");
+        }
+    })
+}
+
+// 获取最新的天气情况，并重新规划行程。
+refreshWhether(whetherResolve, whetherReject);
+```
+
+在whetherResolve()函数中，出现了多层嵌套，怎么解决这个问题呢。
+
+下面改用promise实现同样的功能：
+```
+// 获取最新的天气信息
+function refreshWhether(resolve, reject) {
+    $.ajax({
+        "url" : 'https://fiddle.jshell.net',
+        'success' : function (result,status,xhr)	{
+        	resolve("成功");
+        },
+        'error' : function (result,status,xhr)	{
+        	reject("失败");
+          console.log(result);
+        }
+    })
+}
+
+
+function whetherResolve(msg)
+{
+    alert("resolve:" + msg)
+    // 天气刷新成功，执行“行程规划”异步任务.
+    // 在回调中调用另一个回调会出现多层嵌套，这种“回调地狱”使我们的代码难以理解
+    return planTrip();
+}
+
+function whetherReject(msg)
+{
+    alert("reject:" + msg)
+}
+
+// 根据天气信息，规划出行计划
+function planTrip() {
+    return $.ajax({
+        "url" : 'https://fiddle.jshell.net'
+    })
+}
+
+
+// 串行之行多个任务
+var promise = new Promise(refreshWhether);
+promise.then(whetherResolve).then((data) => {
+  // planTrip中ajax请求的返回的内容（html）
+	console.log(data);
+}).catch(whetherReject);
+```
+
+通过promise.then().then()，我们规避了前面循环嵌套的问题，代码可读性更好。
+
+
+
+```更好
+```
