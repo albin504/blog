@@ -107,7 +107,12 @@ promise.then(whetherResolve).then((data) => {
 
 通过promise.then().then()，我们规避了前面循环嵌套的问题，代码可读性更好。
 
+**这里我们来理一下，promise到底是什么？**
+
+> Promise 是现代 JavaScript 中异步编程的基础，是一个由异步函数返回的可以向我们指示当前操作所处的状态的对象。
+
+1. 先有一个异步函数。如setTimeout、ajax，都是异步函数
+2. 通过 **new Promise(asyncFunc)** 的方式，封装异步函数，返回一个“承诺”
+3. 承诺，当异步任务之行完成时，执行特定的回调函数。
 
 
-```更好
-```
