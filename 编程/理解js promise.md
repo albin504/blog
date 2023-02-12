@@ -3,7 +3,7 @@
 2. 天气获取成功之后，进行行程规划
 这两步都要调用api，比较慢，因此我们想异步实现“行程规划”的功能。
 
-过去jquery ajax用的比较多，涉及到异步回调的代码，一般是这么写的：
+# 过去jquery ajax用的比较多，涉及到异步回调的代码，一般是这么写的：
 
 ```
 // 获取最新的天气信息
@@ -59,7 +59,7 @@ refreshWhether(whetherResolve, whetherReject);
 
 在whetherResolve()函数中，出现了多层嵌套，怎么解决这个问题呢。
 
-下面改用promise实现同样的功能：
+#  下面改用promise实现同样的功能：
 ```
 // 获取最新的天气信息
 function refreshWhether(resolve, reject) {
@@ -107,7 +107,7 @@ promise.then(whetherResolve).then((data) => {
 
 通过promise.then().then()，我们规避了前面循环嵌套的问题，代码可读性更好。
 
-**这里我们来理一下，promise到底是什么？**
+# **这里我们来理一下，promise到底是什么？**
 
 > Promise 是现代 JavaScript 中异步编程的基础，是一个由异步函数返回的可以向我们指示当前操作所处的状态的对象。
 
