@@ -63,4 +63,41 @@ aws上任意一个实体，都可以称为“资源”。如
 - 通过api访问我的s3服务，通过“arn:aws:s3:ap-southeast-1:324325127702:accesspoint/albin-s3-accesspoint” 就定义了服务的ID。如果没有这个arn，调用者api中就需要设置很多参数（如区域、根帐号ID等）来告诉aws具体是要调用哪个服务。
 
 
-这里的原理和IAM中的访问密钥是一个思路。用户调用api，为了识别用户身份，我们不能要求用户填写帐号密码，所以就用**访问密钥**来指代身份。
+# VPC
+官方解释：
+
+    Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that you've defined. 
+    This virtual network closely resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
+    亚马逊虚拟私有云（Amazon VPC）使您能够将AWS资源启动到您定义的虚拟网络中。这种虚拟网络与您在自己的数据中心运行的传统网络非常相似，其优点是使用AWS的可扩展基础架构。
+    
+个人理解：VPC就像是公司内网。每家公司都有一个大的私有网络，就类似于VPC。
+
+<img width="1379" alt="image" src="https://user-images.githubusercontent.com/3232275/219937772-94ac3dbf-5981-4ee7-9d1b-8679cba552a4.png">
+
+
+## VPC的安全策略
+如VPC B想访问VPC A中的redis服务，就可以在安全组中设置VPC A的流量入口规则：
+<img width="1681" alt="image" src="https://user-images.githubusercontent.com/3232275/219937518-70d11bf5-68ef-4788-9a44-b5055b449ebe.png">
+上图的设置，意思是允许vpc：031afe41a08e6f3dc 访问我的所有端口。
+在aws上，如果在两个区域（举例，美国、新加坡）分别部署了不同的服务：
+- 美国部署了数据库服务
+- 新加坡部署了ec2
+ec2和db，记得默认应该归属于不同的vpc，不允许他们之间进行相互访问。如果要允许访问，就要进行上面的安全设置。
+
+## 子网
+    A subnet is a range of IP addresses in your VPC. A subnet must reside in a single Availability Zone. After you add subnets, you can deploy AWS resources in your VPC.
+
+一个vpc中可以创建多个子网。子网把vpc划分成多个网络，一个服务（如ec2）归属于某一个子网。
+<img width="1233" alt="image" src="https://user-images.githubusercontent.com/3232275/219937994-04891af2-0b9e-4cdf-b8d3-e3c65ec27ff0.png">
+<img width="1050" alt="image" src="https://user-images.githubusercontent.com/3232275/219937978-def9bb21-18ce-445e-9562-4ffffde8c917.png">
+
+这个服务的ip是172.31.24.125，归属的子网网段是172.31.16.0/20。
+网段后面的 **/20** 是什么意思呢？
+意思ip地址的前20位是网络地址，后12位是主机地址，这个网段可以分配4095(2的12次方减1)个ip。这个网段的子网掩码是是255.255.15.0
+<img width="556" alt="image" src="https://user-images.githubusercontent.com/3232275/219938754-6ec89e73-0982-4238-b16e-3cfc4a87b160.png">
+
+
+
+
+
+
