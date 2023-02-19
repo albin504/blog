@@ -50,3 +50,5 @@ aws s3api get-object --key 2022Q4_alphabet_earnings_release.pdf --bucket albin-a
 太方便不过了。
 使用aws cli之前，需要先绑定用户。（如下面，输入access key、secret key，就完成了身份绑定）
 <img width="520" alt="image" src="https://user-images.githubusercontent.com/3232275/219936110-d26bb1c4-27d1-47d8-b11f-960aba4ec94c.png">
+
+绑定之后，会存储在本地文件** ～/.aws/credentials ** 中，后续再调用
