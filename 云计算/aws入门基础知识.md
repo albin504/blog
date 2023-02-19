@@ -51,4 +51,16 @@ aws s3api get-object --key 2022Q4_alphabet_earnings_release.pdf --bucket albin-a
 使用aws cli之前，需要先绑定用户。（如下面，输入access key、secret key，就完成了身份绑定）
 <img width="520" alt="image" src="https://user-images.githubusercontent.com/3232275/219936110-d26bb1c4-27d1-47d8-b11f-960aba4ec94c.png">
 
-绑定之后，会存储在本地文件** ～/.aws/credentials ** 中，后续再调用
+绑定之后，会存储在本地文件** ～/.aws/credentials ** 中，后续再调用api，就不用再输入身份信息了。
+
+# ARN
+Amazon Resource Names (ARNs)。即亚马逊资源名字。ARN为每一个资源定义了一个唯一的资源ID
+aws上任意一个实体，都可以称为“资源”。如
+- arn:aws:iam::324325127702:user/s3_user 是IAM用户s3_user的资源ID
+- arn:aws:s3:ap-southeast-1:324325127702:accesspoint/albin-s3-accesspoint   是s3接入点albin-s3-accesspoint的资源ID
+每个资源都有了唯一的ID，这样服务之间相互访问时，只要提供资源ID就可以了。举例：
+- 要给IAM用户s3_user开放s3服务只读权限，资源ID就可以代表这个用户。
+- 通过api访问我的s3服务，通过“arn:aws:s3:ap-southeast-1:324325127702:accesspoint/albin-s3-accesspoint” 就定义了服务的ID。如果没有这个arn，调用者api中就需要设置很多参数（如区域、根帐号ID等）来告诉aws具体是要调用哪个服务。
+
+
+这里的原理和IAM中的访问密钥是一个思路。用户调用api，为了识别用户身份，我们不能要求用户填写帐号密码，所以就用**访问密钥**来指代身份。
