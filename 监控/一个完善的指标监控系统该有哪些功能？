@@ -1,0 +1,48 @@
+# 数据采集
+## prometheus指标介绍
+### 指标可以用来衡量一个业务的运行状况。如一个服务的累计报错次数就是一个指标。
+
+在prometheus中，指标数据格式如下：
+```
+wb_php_error_total{service="out-platform-yii2-log-prod",instance="gzhxy-map-to-opera-11087.gzhxy"} 7
+wb_php_error_total{service="out-platform-yii2-log-prod",instance="gzhxy-map-to-opera-5455.gzhxy"} 23
+wb_php_error_total{service="out-platform-yii2-log-prod",instance="gzhxy-mms-voice-matrix06.gzhxy"} 949
+wb_php_error_total{service="out-platform-yii2-log-prod",instance="gzhxy-ns-map-innet-bee01.gzhxy"} 100675
+wb_php_error_total{service="stat-platform-yii2-log-prod",instance="gzhxy-ns-map-innet-bee01.gzhxy"} 60
+wb_php_error_total{service="stat-platform-yii2-log-prod",instance="gzns-audio-engine-16kopenime148.gzns"} 28
+wb_php_error_total{service="stat-platform-yii2-log-prod",instance="gzns-ecom-search-m12024.gzns"} 35
+```
+
+service、instance是指标的维度。以最后一行指标数据为例：
+实例gzns-ecom-search-m12024.gzns上部署的服务stat-platform-yii2-log-prod，累计报错了35次
+
+### 时间序列
+prometheus记录了指标在所有时间点上的样本值。
+  https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/promql/what-is-prometheus-metrics-and-labels
+还是以最后一行指标数据为例，假如数据采集周期是1min，prometheus每分钟都会记录一次累计报错次数，有了时序数据，就可以干很多事情：
+1. 监控“最近1分钟内，单个服务在单个实例上的新增报错次数超过一个阈值”，触发报警。 （对应PromQL的increment函数）
+2. 监控“最近1分钟内，所有服务总的报错次数超过一个阈值”，触发报警。
+3. 监控“最近1分钟内，平均每秒报错次数超过一个阈值”，触发报警。 （对应PromQL的rate函数）
+
+
+## 如何进行数据采集？
+业务方（举例一个网站）通过http接口暴露指标数据（如，http接口返回类似上面的指标代码），prometheus定期把指标数据同步到自己的时序数据库，然后存起来。
+
+# 告警策略
+## 告警规则
+利用PromQL表达式，定义一个表达式。如：
+```
+// 所有服务在最近10分钟内新增报错次数超过10次
+sum(increase(wb_php_error_total[10m])) >10 
+```
+
+```
+sum(increase(wb_php_error_total[100m])) by(service) >10 // 对于每个服务来说，如果最近100分钟内新增报错超过10次，触发报警。
+```
+
+
+
+
+## 异常持续时间
+
+# 报警策略
