@@ -97,7 +97,3 @@ ec2和db，记得默认应该归属于不同的vpc，不允许他们之间进行
 <img width="556" alt="image" src="https://user-images.githubusercontent.com/3232275/219938754-6ec89e73-0982-4238-b16e-3cfc4a87b160.png">
 
 
-
-
-
-
